@@ -71,7 +71,6 @@ declare(strict_types=1);
     <?php endif; ?>
     <?php if (isset($success)): ?>
     <?php endif; ?>
-
     <?php if (isset($_GET['error'])): ?>
     <div class="alert alert-danger">
         <?php echo $_GET['error']; ?>
