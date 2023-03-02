@@ -1,5 +1,7 @@
 # Random Name Generator for General Purpose 
 
+![img.png](img.png)
+## Description
 This is a simple random name generator for general purpose. It can be used to generate random names for any purpose.
 
 - Useful for generating random names for testing purposes.
