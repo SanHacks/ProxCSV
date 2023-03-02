@@ -1,5 +1,6 @@
 <?php
-declare(strict_types=1);
+declare
+(strict_types=1);
 /**
  * This file is part of the Prox Test .
  *
@@ -71,6 +72,23 @@ function insertIntoDB(PDO $pdo, $name, $surname, $idNo, $dob): bool
  * array_search() Searches the array for a given value and returns the corresponding key if successful
  * Check if the ID number already exists in the database
  */
+/**
+ * @param string $message
+ * @return false|resource
+ */
+function dataLogger(string $message)
+{
+//Log error with $pdo->errorInfo() and values to proxCSV.log
+    if (!file_exists('proxCSV.log')) {
+        //Sets access and modification time of file
+        touch('proxCSV.log');
+    }
+    $log = fopen('proxCSV.log', 'a');
+
+    fwrite($log, $message);
+    return $log;
+}
+
 if (isset($_POST['upload_csv'])) {
 
     if (!empty($_FILES['csvfile']['name'])) {
@@ -90,31 +108,33 @@ if (isset($_POST['upload_csv'])) {
                 $pdo = getPdo();
                 $result = checkForID($pdo, $idNumber);
                 if ($result) {
-                    echo "ID number already exists in the database";
-
+                    $message = "ID number already exists in the database";
+                    dataLogger($message);
                 } else {
                     $pdo = getPdo();
                     $result = insertIntoDB($pdo, $name, $surname, $idNumber, $dob);
                     if ($result) {
-                        echo "Row inserted successfully";
+                        $message = "Row with values: " . $name . ", " . $surname . ", " . $idNumber . ", " . $dob . "
+                        inserted successfully";
                     } else {
-                        echo "Failed to insert row";
+                        $message = "Failed to insert row with values: " . $name . ", " . $surname . ", " . $idNumber .
+                            ", " . $dob . " with error: " . $pdo->errorInfo();
                     }
+                    //Log error with $pdo->errorInfo() and values to proxCSV.log
+                    $log = dataLogger($message);
                 }
 
             }
              $csvRows = count(file($tmpFilePath));
             // Close the CSV file
-            fclose($handle);
-            header("Location: index.php?success=1&file=" . $_FILES['csvfile']['name'] & "rows=" . $csvRows);
 
-        } else {
-            echo "Failed to open CSV file";
-            header("Location: index.php?success=0&reason=failed_to_open_csv_file");
+            fclose($handle);
+            header("Location: index.php?success=1&rows=$csvRows");
             exit();
+        } else {
+            header("Location: index.php?success=0&reason=failed_to_open_csv_file");
         }
     } else {
-        echo "No CSV file uploaded";
         header("Location: index.php?success=0&reason=no_csv_file_uploaded");
         exit();
     }
