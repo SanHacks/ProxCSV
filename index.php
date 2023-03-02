@@ -101,6 +101,11 @@ FAIL:  
     </div>
 </div>
 <?php if (isset($_GET['success'])): ?>
+    <?php if ($_GET['success'] == '1'): ?>
+    <div class="alert alert-success">
+        <li>File Uploaded Successfully</li>
+    </div>
+    <?php endif; ?>
 
 <div class="alert alert-success">
     <?php echo $_GET['success']; ?>
@@ -134,17 +139,17 @@ FAIL:  
 
             </div>
             <div class="card-body">
-            <form action="Storage.php" method="post" class="form form-group form-control form-control-lg" enctype="multipart/form-data"
+            <form action="Storage.php" method="post" enctype="multipart/form-data" class="form form-group form-control form-control-lg">
                 <div class="form-group">
                     <label for="name">The Number of Names to Generate</label>
                     <div>
-                        <label for="formFileLg" class="form-label">Upload CSV</label>
-                        <input class="form-control form-control-lg" id="formFileLg" type="file" accept=".csv">
+                        <label for="csvfile" class="form-label">Upload CSV</label>
+                        <input class="form-control form-control-lg" id="csvfile" type="file" name="csvfile" accept=".csv">
                     </div>
                 </div>
 
                 <div class="form-group mt-3">
-                    <button type="submit" name="csvUpload" id="csvUpload" class="btn btn-primary
+                    <button type="submit" name="upload_csv" id="upload_csv" class="btn btn-primary
                             btn-block">Upload CSV</button>
                     <button type="reset" class="btn btn-danger btn-block">Clear</button>
                 </div>
@@ -239,14 +244,24 @@ FAIL:  
 
 
                         $outputPath = "CsvOutput/output.csv";
+                        //Opens file or URL
                         $file = fopen($outputPath, "w");
                         $header = ["Name", "Surname", "ID Number", "Date of Birth"];
+                        //Format line as CSV and write to file pointer
                         fputcsv($file, $header);
                         for ($i = 0; $i < $count; $i++) {
-                            $name = $names[rand(0, count($names) - 1)];// rand(0, count($names) - 1) is the index of the array
-                            $surname = $surnames[rand(0, count($surnames) - 1)];// rand(0, count($surnames) - 1) is the index of the array
-                            $idNumber = rand(1000000000000, 9999999999999);// rand(1000000000000, 9999999999999) is the id number 13 digits long
-                            $dateOfBirth = rand(1950, 2018) . "-" . rand(1, 12) . "-" . rand(1, 28); // rand(1950, 2018) is the year, rand(1,
+                            //Generate random names by Generating a random integer : Formula rand(min, max) where min
+                            // is the minimum value and max is the maximum value
+                            //output is a random integer between min and max (both included) Pointing to the index of
+                            // the array
+                            $name = $names[rand(0, count($names) - 1)];
+                            // rand(0, count($names) - 1) is the index of the array
+                            $surname = $surnames[rand(0, count($surnames) - 1)];
+                            // rand(0, count($surnames) - 1) is the index of the array
+                            $idNumber = rand(1000000000000, 9999999999999);
+                            // rand(1000000000000, 9999999999999) is the id number 13 digits long
+                            $dateOfBirth = rand(1950, 2018) . "-" . rand(1, 12) . "-" . rand(1, 28);
+                            // rand(1950, 2018) is the year, rand(1,
                             // 12) is the month, rand(1, 28) is the day
                             $row = [$name, $surname, $idNumber, $dateOfBirth];
                             echo "
