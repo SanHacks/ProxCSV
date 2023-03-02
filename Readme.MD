@@ -1,7 +1,6 @@
 # Random Name Generator for General Purpose 
 
-![image](https://user-images.githubusercontent.com/13138647/222407563-c06841ce-94e8-46e3-97d6-9465fe5748b3.png)
-
+![img.png](img.png)
 ## Description
 This is a simple random name generator for general purpose. It can be used to generate random names for any purpose.
 

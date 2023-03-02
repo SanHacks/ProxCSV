@@ -1,6 +1,6 @@
 <?php
-declare
-(strict_types=1);
+declare(strict_types=1);
+include_once 'includes/settings.php';
 /**
  * This file is part of the Prox Test .
  *
@@ -58,9 +58,13 @@ function checkForID(PDO $pdo, $idNo)
  */
 function insertIntoDB(PDO $pdo, $name, $surname, $idNo, $dob): bool
 {
-    $sql = "INSERT INTO csv_import (name, surname, id_number, DOB) VALUES (:name, :surname, :id_number, :DOB)";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute(['name' => $name, 'surname' => $surname, 'id_number' => $idNo, 'DOB' => $dob]);
+    try {
+        $sql = "INSERT INTO csv_import (name, surname, id_number, DOB) VALUES (:name, :surname, :id_number, :DOB)";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute(['name' => $name, 'surname' => $surname, 'id_number' => $idNo, 'DOB' => $dob]);
+    } catch (\PDOException $e) {
+        throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    }
 }
 
 /**

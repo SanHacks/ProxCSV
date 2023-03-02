@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+include_once 'includes/settings.php';
 ?>
 
 <!DOCTYPE html>
@@ -62,9 +63,10 @@ declare(strict_types=1);
 </div>
 
 
-<div class="alert alert-success">
+
     <?php if ($_GET['success'] == '1'): ?>
-        <li>Rows Inserted Successfully: <?php echo $_GET['rows']; ?></li>
+<div class="alert alert-success">
+        <li>Rows Processed Successfully: <?php echo $_GET['rows']; ?></li>
     <?php endif; ?>
     <?php if ($_GET['success'] != '1'): ?>
     <?php unset($_GET['success']); ?>
@@ -100,7 +102,6 @@ declare(strict_types=1);
             <div class="card-body">
             <form action="Storage.php" method="post" enctype="multipart/form-data" class="form form-group form-control form-control-lg">
                 <div class="form-group">
-                    <label for="name">The Number of Names to Generate</label>
                     <div>
                         <label for="csvfile" class="form-label">Upload CSV</label>
                         <input class="form-control form-control-lg" id="csvfile" type="file" name="csvfile" accept=".csv">
@@ -201,18 +202,23 @@ declare(strict_types=1);
                             "Mashudu",
                         ];
 
-                        $appendTime = time();
-                        $outputPath = "CsvOutput/output" . $appendTime . ".csv";
+                        $appendTime = date("Y-m-d-H-i-s");
+                        $outputPath = "Output/output.csv";
+                        $outputPath2 = "Output/output" . $appendTime . ".csv";
+                        //Save two files in the Output folder
+
                         //Opens file or URL
                         $file = fopen($outputPath, "w");
+                        $file2 = fopen($outputPath2, "w");
                         $header = ["Name", "Surname", "ID Number", "Date of Birth"];
                         //Format line as CSV and write to file pointer
                         fputcsv($file, $header);
+                        fputcsv($file2, $header);
                         for ($i = 0; $i < $count; $i++) {
-                            //Generate random names by Generating a random integer : Formula rand(min, max) where min
-                            // is the minimum value and max is the maximum value
-                            //output is a random integer between min and max (both included) Pointing to the index of
-                            // the array
+                          /*  Generate random names by Generating a random integer : Formula rand(min, max) where min
+                             is the minimum value and max is the maximum value
+                            output is a random integer between min and max (both included) Pointing to the index of
+                             the array*/
                             $name = $names[rand(0, count($names) - 1)];
                             // rand(0, count($names) - 1) is the index of the array
                             $surname = $surnames[rand(0, count($surnames) - 1)];
@@ -223,6 +229,19 @@ declare(strict_types=1);
                             // rand(1950, 2018) is the year, rand(1,
                             // 12) is the month, rand(1, 28) is the day
                             $row = [$name, $surname, $idNumber, $dateOfBirth];
+                            //Check if row exists in the file before writing to the file
+                                while (($line = fgetcsv($file)) !== false) {
+                                    //Check if the row exists in the file
+                                    if ($line[0] == $name && $line[1] == $surname && $line[2] == $idNumber && $line[3] == $dateOfBirth) {
+                                      //Generate new names if the row exists in the file
+                                        $name = $names[rand(0, count($names) - 1)];
+                                        $surname = $surnames[rand(0, count($surnames) - 1)];
+                                        $idNumber = rand(1000000000000, 9999999999999);
+                                        $dateOfBirth = rand(1950, 2018) . "-" . rand(1, 12) . "-" . rand(1, 28);
+                                        $row = [$name, $surname, $idNumber, $dateOfBirth];
+                                    }
+                                }
+
                             echo "
                         <table class='table table-striped'>
                             <thead>
@@ -244,8 +263,10 @@ declare(strict_types=1);
                         ";
 
                             fputcsv($file, $row);
+                            fputcsv($file2, $row);
                         }
                         fclose($file);
+                        fclose($file2);
                     }
                     ?>
                 </div>
