@@ -200,7 +200,7 @@ FAIL:  
                             "Bill",
                             "Saint",
                             "Amelia",
-                            "Harper",
+                            "Ron",
                             "Evelyn",
                             "Jian",
                             "Emily",
@@ -224,7 +224,7 @@ FAIL:  
                             "Burr",
                             "Bean",
                             "Carlin",
-                            "TheGuy",
+                            "Swanson",
                             "Anderson",
                             "Betram",
                             "Jackson",

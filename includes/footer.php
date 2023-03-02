@@ -1,4 +1,27 @@
-<footer style="padding-top: 20px; padding-bottom: 20px; background-color: #f8f9fa; color: #6c757d; font-size: 14px; font-weight: 400; line-height: 1.5; text-align: center;">
+
+<footer id="footer"  style="padding-top: 20px; padding-bottom: 20px; background-color: #f8f9fa; color: #6c757d; font-size: 14px; font-weight: 400; line-height: 1.5; text-align: center;">
+<!-- MOve to top button -->
+<button class="btn" onclick="topFunction()" id="myBtn" title="Go to top">Move to Top<i class="fas fa-arrow-up"></i></button>
+<script>
+//Get the button
+var mybutton = document.getElementById("myBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+</script>
   <div class="container">
     <div class="row">
       <div class="col-md-4">
