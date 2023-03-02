@@ -40,61 +40,10 @@ FAIL:  
 //                 The initials are the first character of the name always. Write a function
 //                to perform the task of creating the CSV file, you should pass it the number of variations you need. -->
 //       <!--The CSV file should be outputted to an output folder, the name of the file must be output.csv. -->
-
-
-$names = [
-    "Gundo",
-    "DevProx",
-    "Ava",
-    "Seth",
-    "Borat",
-    "Bill",
-    "Saint",
-    "Amelia",
-    "Harper",
-    "Evelyn",
-    "Jian",
-    "Emily",
-    "Gabe",
-    "Mila",
-    "Helena",
-    "Gilfoyle",
-    "Sofia",
-    "Nelson",
-    "Aria",
-    "Millie",
-];
-
-$surnames = [
-    "Sifhufhi",
-    "SanHacks",
-    "San",
-    "Fun",
-    "Sagdiev",
-    "Rogen",
-    "Burr",
-    "Bean",
-    "Carlin",
-    "TheGuy",
-    "Anderson",
-    "Betram",
-    "Jackson",
-    "Bighetti",
-    "Yang",
-    "Martin",
-    "Mulalo",
-    "Garcia",
-    "Martinez",
-    "Mashudu",
-];
-
-
-$outputPath = "CsvOutput/output.csv";
-
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>ProxServer</title>
@@ -180,25 +129,127 @@ $outputPath = "CsvOutput/output.csv";
             <div class="card">
                 <div class="card-header">
 
-                    <h3 class="text-center">Data Submission</h3>
+                    <h5 class="text-center">Upload CSV</h5>
+                </div>
+
+            </div>
+            <div class="card-body">
+            <form action="Storage.php" method="post" class="form form-group form-control form-control-lg" enctype="multipart/form-data"
+                <div class="form-group">
+                    <label for="name">The Number of Names to Generate</label>
+                    <div>
+                        <label for="formFileLg" class="form-label">Upload CSV</label>
+                        <input class="form-control form-control-lg" id="formFileLg" type="file" accept=".csv">
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <button type="submit" name="csvUpload" id="csvUpload" class="btn btn-primary
+                            btn-block">Upload CSV</button>
+                    <button type="reset" class="btn btn-danger btn-block">Clear</button>
+                </div>
+
+            </form>
+           </div>
+        </br>
+        </br>
+
+            <div class="card">
+                <div class="card-header">
+
+                    <h3 class="text-center">Names Generation</h3>
                 </div>
 
                     </div>
                 <div class="card-body">
-                    <?php
-                    $file = fopen($outputPath, "w");
-                    $header = ["Name", "Surname", "ID Number", "Date of Birth"];
-                    fputcsv($file, $header);
-                    for ($i = 0; $i < 10000; $i++) {
-                        $name = $names[rand(0, count($names) - 1)];// rand(0, count($names) - 1) is the index of the array
-                        $surname = $surnames[rand(0, count($surnames) - 1)];// rand(0, count($surnames) - 1) is the index of the array
-                        $idNumber = rand(1000000000000, 9999999999999);// rand(1000000000000, 9999999999999) is the id number 13 digits long
-                        $dateOfBirth = rand(1950, 2018) . "-" . rand(1, 12) . "-" . rand(1, 28); // rand(1950, 2018) is the year, rand(1,
-                        // 12) is the month, rand(1, 28) is the day
-                        $row = [$name, $surname, $idNumber, $dateOfBirth];
-//                        print $name . " " . $surname . " " . $idNumber . " " . $dateOfBirth . " " . "/n";
 
-                        echo "
+                        <!--- Name, Surname, Id No, Date of Birth, POST button, CANCEL button -->
+                        <form action="index.php" method="post" class="form form-group form-control form-control-lg">
+                            <div class="form-group">
+                                <label for="name">The Number of Names to Generate</label>
+                                <input type="number" name="count" id="count" class="form-control"
+                                       placeholder="Number of Names to Generate"
+                                    <?php if (isset($_POST['count'])): ?>
+                                        value="<?php echo $_POST['count']; ?>"
+                                    <?php endif; ?>
+                                >
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <button type="submit" name="submit" id="submit" class="btn btn-primary
+                            btn-block">Generate CSV</button>
+                                <button type="reset" class="btn btn-danger btn-block">Cancel</button>
+                            </div>
+
+                        </form>
+
+                    <?php
+
+                    if (isset($_POST['submit'])) {
+                        $count = $_POST['count'];
+                        $names = generateNames($count);
+                    }
+                    function generateNames($count)
+                    {
+                        $names = [
+                            "Gundo",
+                            "DevProx",
+                            "Ava",
+                            "Seth",
+                            "Borat",
+                            "Bill",
+                            "Saint",
+                            "Amelia",
+                            "Harper",
+                            "Evelyn",
+                            "Jian",
+                            "Emily",
+                            "Gabe",
+                            "Adrian",
+                            "Helena",
+                            "Gilfoyle",
+                            "Sofia",
+                            "Nelson",
+                            "Aria",
+                            "Millie",
+                        ];
+
+                        $surnames = [
+                            "Sifhufhi",
+                            "SanHacks",
+                            "San",
+                            "Hall",
+                            "Sagdiev",
+                            "Rogen",
+                            "Burr",
+                            "Bean",
+                            "Carlin",
+                            "TheGuy",
+                            "Anderson",
+                            "Betram",
+                            "Jackson",
+                            "Bighetti",
+                            "Yang",
+                            "Martin",
+                            "Mulalo",
+                            "Garcia",
+                            "Martinez",
+                            "Mashudu",
+                        ];
+
+
+                        $outputPath = "CsvOutput/output.csv";
+                        $file = fopen($outputPath, "w");
+                        $header = ["Name", "Surname", "ID Number", "Date of Birth"];
+                        fputcsv($file, $header);
+                        for ($i = 0; $i < $count; $i++) {
+                            $name = $names[rand(0, count($names) - 1)];// rand(0, count($names) - 1) is the index of the array
+                            $surname = $surnames[rand(0, count($surnames) - 1)];// rand(0, count($surnames) - 1) is the index of the array
+                            $idNumber = rand(1000000000000, 9999999999999);// rand(1000000000000, 9999999999999) is the id number 13 digits long
+                            $dateOfBirth = rand(1950, 2018) . "-" . rand(1, 12) . "-" . rand(1, 28); // rand(1950, 2018) is the year, rand(1,
+                            // 12) is the month, rand(1, 28) is the day
+                            $row = [$name, $surname, $idNumber, $dateOfBirth];
+                            echo "
                         <table class='table table-striped'>
                             <thead>
                                 <tr>
@@ -218,9 +269,10 @@ $outputPath = "CsvOutput/output.csv";
                             </tbody>
                         ";
 
-                        fputcsv($file, $row);
+                            fputcsv($file, $row);
+                        }
+                        fclose($file);
                     }
-                    fclose($file);
                     ?>
                 </div>
             </div>
